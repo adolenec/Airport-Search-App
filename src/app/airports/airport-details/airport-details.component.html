@@ -1,1 +1,13 @@
-<p>airport-details works!</p>
+<ng-container *ngIf="airportDetails$ | async as data">
+  <p *ngIf="data.isLoading" class="text-center my-4">Loading..</p>
+  <p *ngIf="data.error" class="text-center my-4">
+    Error occured while fetching Airport data!
+  </p>
+  <div *ngIf="data.value as airportDetails">
+    <div class="flex items-center justify-between">
+      <h1 class="text-3xl">Details</h1>
+      <button [routerLink]="['..']" class="w-36 py-2 my-4">Back</button>
+    </div>
+    <app-airport-form [airportDetails]="airportDetails"></app-airport-form>
+  </div>
+</ng-container>

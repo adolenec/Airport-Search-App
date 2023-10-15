@@ -12,7 +12,11 @@ import {
 } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { HttpResponseState } from '../core/models/http-response-state.model';
-import { AirportsResponse } from './models/airport.model';
+import {
+  AirportData,
+  AirportDetailsResponse,
+  AirportsResponse,
+} from './models/airport.model';
 import { API_URL } from '../app.config';
 
 @Injectable({
@@ -24,8 +28,9 @@ export class AirportsService {
   request = signal<AirportsRequest>({
     keyword: '',
     pageLimit: 5,
-    link: API_URL,
+    link: `${API_URL}?subType=AIRPORT`,
   });
+  airportId = signal('');
 
   airports$: Observable<HttpResponseState<AirportsResponse>> = toObservable(
     this.request
@@ -40,6 +45,25 @@ export class AirportsService {
         catchError((error) => of({ isLoading: false, error }))
       );
     }),
+    startWith({ isLoading: true })
+  );
+
+  airportDetails$: Observable<HttpResponseState<AirportData>> = toObservable(
+    this.airportId
+  ).pipe(
+    switchMap((id) =>
+      localStorage.getItem(id)
+        ? of({
+            value: {
+              ...JSON.parse(localStorage.getItem(id) as string),
+            },
+            isLoading: false,
+          } as HttpResponseState<AirportData>)
+        : this.http.get<AirportDetailsResponse>(`${API_URL}/${id}`).pipe(
+            map((value) => ({ isLoading: false, value: value.data })),
+            catchError((error) => of({ isLoading: false, error }))
+          )
+    ),
     startWith({ isLoading: true })
   );
 }

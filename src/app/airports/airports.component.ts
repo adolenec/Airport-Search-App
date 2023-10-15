@@ -19,7 +19,11 @@ export class AirportsComponent {
   request = this.airportsService.request;
 
   searchAirports(value: string) {
-    this.request.mutate((req) => ((req.keyword = value), (req.link = API_URL)));
+    this.request.mutate(
+      (req) => (
+        (req.keyword = value), (req.link = `${API_URL}?subType=AIRPORT`)
+      )
+    );
   }
 
   onNext(next: string) {

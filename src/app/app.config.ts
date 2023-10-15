@@ -13,7 +13,7 @@ import { Observable, tap } from 'rxjs';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { Token } from './core/models/token.model';
 
-export const API_URL = 'https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT';
+export const API_URL = 'https://test.api.amadeus.com/v1/reference-data/locations';
 
 function initializeAppFactory(httpClient: HttpClient): () => Observable<any> {
   const clientId = 'V8lZuAMnhgSzQvF18xVB5cOWrhZS8qKo';

@@ -7,14 +7,14 @@ body {
 }
 
 input {
-  @apply bg-transparent border-slate-200 rounded-md border-solid border p-1;
+  @apply bg-transparent border-slate-400 rounded-md border-solid border p-1;
 
   &:focus {
     @apply outline-none;
   }
 }
 
-button {
+button, button[type="submit"]{
   @apply bg-slate-700 text-slate-300 rounded-xl;
 
   &:disabled {

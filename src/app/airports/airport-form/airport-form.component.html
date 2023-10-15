@@ -1,0 +1,55 @@
+<form [formGroup]="airportDetailsForm" (ngSubmit)="onSubmit()">
+  <div>
+    <div>
+      <label for="name">Name</label>
+      <input formControlName="name" type="text" id="name" />
+    </div>
+    <div>
+      <label for="detailedName">Detailed Name</label>
+      <input formControlName="detailedName" type="text" id="regionCode" />
+    </div>
+    <div>
+      <label for="iataCode">Iata Code</label>
+      <input formControlName="iataCode" type="text" id="iataCode" />
+    </div>
+  </div>
+  <div formGroupName="address">
+    <div class="md:flex md:gap-4">
+      <div class="form-control">
+        <label for="cityCode">City Code</label>
+        <input formControlName="cityCode" type="text" id="cityCode" />
+      </div>
+      <div class="form-control">
+        <label for="cityName">City Name</label>
+        <input formControlName="cityName" type="text" id="cityName" />
+      </div>
+    </div>
+    <div class="md:flex md:gap-4">
+      <div class="form-control">
+        <label for="countryCode">Country Code</label>
+        <input formControlName="countryCode" type="text" id="countryCode" />
+      </div>
+      <div class="form-control">
+        <label for="countryName">Country Name</label>
+        <input formControlName="countryCode" type="text" id="countryName" />
+      </div>
+    </div>
+    <div>
+      <label for="regionCode">Region Code</label>
+      <input formControlName="regionCode" type="text" id="regionCode" />
+    </div>
+  </div>
+  <div formGroupName="geoCode">
+    <div class="md:flex md:gap-4">
+      <div class="form-control">
+        <label for="latitude">Latitude</label>
+        <input formControlName="latitude" type="text" id="latitude" />
+      </div>
+      <div class="form-control">
+        <label for="longitude">Longitude</label>
+        <input formControlName="longitude" type="text" id="longitude" />
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="w-full md:w-36 py-2">Submit</button>
+</form>
