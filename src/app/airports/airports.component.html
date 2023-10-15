@@ -1,1 +1,49 @@
-<p>airports works!</p>
+<input
+  #searchTerm
+  type="text"
+  class="my-4"
+  placeholder="Search airports..."
+  [ngModel]="request().keyword"
+  (input)="searchAirports(searchTerm.value)"
+/>
+<ng-container *ngIf="searchTerm.value; else startTyping">
+  <ng-container *ngIf="airports$ | async as data">
+    <p *ngIf="data.isLoading" class="text-center my-4">Loading...</p>
+    <p *ngIf="data.error" class="text-center my-4">
+      An error occured while fetching data!
+    </p>
+    <div *ngIf="data.value as airports">
+      <ng-container *ngIf="airports.data.length > 0; else noData">
+        <app-airport
+          *ngFor="let airport of data.value?.data"
+          [airport]="airport"
+        >
+        </app-airport>
+        <div class="flex justify-around my-4">
+          <button
+            class="w-36 py-2"
+            [disabled]="!airports.meta.links.previous"
+            (click)="onPrevious(airports.meta.links.previous)"
+          >
+            Previous
+          </button>
+          <button
+            class="w-36 py-2"
+            [disabled]="!airports.meta.links.next"
+            (click)="onNext(airports.meta.links.next)"
+          >
+            Next
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-container>
+<ng-template #startTyping>
+  <p class="text-center my-4">
+    To search for airports, enter the name of the city.
+  </p>
+</ng-template>
+<ng-template #noData>
+  <p class="text-center my-4">There are no results for the entered term.</p>
+</ng-template>

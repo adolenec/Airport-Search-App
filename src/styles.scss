@@ -5,3 +5,19 @@
 body {
   @apply bg-slate-500 text-slate-300;
 }
+
+input {
+  @apply bg-transparent border-slate-200 rounded-md border-solid border p-1;
+
+  &:focus {
+    @apply outline-none;
+  }
+}
+
+button {
+  @apply bg-slate-700 text-slate-300 rounded-xl;
+
+  &:disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+}
