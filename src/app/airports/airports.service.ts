@@ -7,6 +7,7 @@ import {
   debounceTime,
   map,
   of,
+  scan,
   startWith,
   switchMap,
 } from 'rxjs';
@@ -15,6 +16,7 @@ import { HttpResponseState } from '../core/models/http-response-state.model';
 import {
   AirportData,
   AirportDetailsResponse,
+  AirportOccurances,
   AirportsResponse,
 } from './models/airport.model';
 import { API_URL } from '../app.config';
@@ -37,15 +39,42 @@ export class AirportsService {
   ).pipe(
     debounceTime(300),
     switchMap((req) => {
-      const params = new HttpParams()
-        .append('keyword', req.keyword)
-        .append('page[limit]', req.pageLimit);
-      return this.http.get<AirportsResponse>(req.link, { params }).pipe(
-        map((value) => ({ isLoading: false, value })),
-        catchError((error) => of({ isLoading: false, error }))
-      );
+      return req.keyword
+        ? this.http
+            .get<AirportsResponse>(req.link, {
+              params: new HttpParams()
+                .append('keyword', req.keyword)
+                .append('page[limit]', req.pageLimit),
+            })
+            .pipe(
+              map((value) => ({ isLoading: false, value })),
+              catchError((error) => of({ isLoading: false, error }))
+            )
+        : of({ isLoading: false });
     }),
     startWith({ isLoading: true })
+  );
+
+  private storedData = localStorage.getItem('airportCountsData');
+
+  airportCount$: Observable<AirportOccurances[]> = this.airports$.pipe(
+    map((response) => response.value?.data || []),
+    scan((acc, curr) => {
+      for (const airport of curr) {
+        acc[airport.id] = {
+          id: airport.id,
+          name: airport.name,
+          count: (acc[airport.id]?.count || 0) + 1,
+        };
+      }
+      localStorage.setItem('airportCountsData', JSON.stringify(acc));
+      return acc;
+    }, JSON.parse(this.storedData as string) || {}),
+    map((counts: { id: AirportOccurances }) =>
+      Object.values(counts)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10)
+    )
   );
 
   airportDetails$: Observable<HttpResponseState<AirportData>> = toObservable(

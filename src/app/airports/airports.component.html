@@ -6,39 +6,46 @@
   [ngModel]="request().keyword"
   (input)="searchAirports(searchTerm.value)"
 />
-<ng-container *ngIf="searchTerm.value; else startTyping">
-  <ng-container *ngIf="airports$ | async as data">
-    <p *ngIf="data.isLoading" class="text-center my-4">Loading...</p>
-    <p *ngIf="data.error" class="text-center my-4">
-      An error occured while fetching data!
-    </p>
-    <div *ngIf="data.value as airports">
-      <ng-container *ngIf="airports.data.length > 0; else noData">
-        <app-airport
-          *ngFor="let airport of data.value?.data"
-          [airport]="airport"
-        >
-        </app-airport>
-        <div class="flex justify-around my-4">
-          <button
-            class="w-36 py-2"
-            [disabled]="!airports.meta.links.previous"
-            (click)="onPrevious(airports.meta.links.previous)"
+<div class="flex flex-col flex-1 gap-4 justify-between md:flex-row-reverse p-4">
+  <ng-container *ngIf="airportCount$ | async as airportCount">
+    <app-most-searched-airports
+      [airports]="airportCount"
+    ></app-most-searched-airports>
+  </ng-container>
+  <ng-container *ngIf="searchTerm.value; else startTyping">
+    <div *ngIf="airports$ | async as data" class="grow">
+      <p *ngIf="data.isLoading" class="text-center my-4">Loading...</p>
+      <p *ngIf="data.error" class="text-center my-4">
+        An error occured while fetching data!
+      </p>
+      <div *ngIf="data.value as airports">
+        <ng-container *ngIf="airports.data.length > 0; else noData">
+          <app-airport
+            *ngFor="let airport of data.value?.data"
+            [airport]="airport"
           >
-            Previous
-          </button>
-          <button
-            class="w-36 py-2"
-            [disabled]="!airports.meta.links.next"
-            (click)="onNext(airports.meta.links.next)"
-          >
-            Next
-          </button>
-        </div>
-      </ng-container>
+          </app-airport>
+          <div class="flex justify-around my-4">
+            <button
+              class="w-36 py-2"
+              [disabled]="!airports.meta.links.previous"
+              (click)="onPrevious(airports.meta.links.previous)"
+            >
+              Previous
+            </button>
+            <button
+              class="w-36 py-2"
+              [disabled]="!airports.meta.links.next"
+              (click)="onNext(airports.meta.links.next)"
+            >
+              Next
+            </button>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </ng-container>
-</ng-container>
+</div>
 <ng-template #startTyping>
   <p class="text-center my-4">
     To search for airports, enter the name of the city.

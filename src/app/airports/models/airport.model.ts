@@ -8,6 +8,12 @@ export interface AirportDetailsResponse {
   data: AirportData;
 }
 
+export interface AirportOccurances {
+  id: string;
+  name: string;
+  count: number;
+}
+
 export interface AirportMeta {
   count: number;
   links: AirportLinks;

@@ -1,0 +1,11 @@
+<div class="my-4 bg-slate-400 p-4 rounded-lg text-slate-700 md:self-start">
+  <div *ngIf="airports.length > 0; else noData">
+    <h2 class="mb-4 text-lg">Top 10 Most Searched Airports</h2>
+    <p *ngFor="let count of airports" class="flex justify-between text-xs">
+      {{ count.name }} <span>{{ count.count }}</span>
+    </p>
+  </div>
+</div>
+<ng-template #noData>
+  <p>There isn't any data about top searches.</p>
+</ng-template>
